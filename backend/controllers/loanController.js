@@ -1,25 +1,40 @@
 const Loan = require('../models/Loan');
-const User = require('../models/User');
 const sendEmail = require('../utils/sendEmail');
 
+// Apply for a loan
 exports.applyLoan = async (req, res) => {
-    const { userId, amount, duration } = req.body;
-    try {
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(400).json({ message: 'User not found' });
-        }
-        if (!user.isVerified) {
-            return res.status(400).json({ message: 'Please verify your email before applying for a loan' });
-        }
+  try {
+    const { userId, loanType, amount, term, mpesaStatement } = req.body;
 
-        const loan = new Loan({ userId, amount, duration });
-        await loan.save();
+    const loan = new Loan({
+      user: userId,
+      loanType,
+      amount,
+      term,
+      mpesaStatement,
+    });
 
-        await sendEmail(user.email, 'Loan Application Received', `Dear ${user.name}, your loan application has been received. We will contact you shortly.`);
+    await loan.save();
 
-        res.status(201).json({ message: 'Loan application submitted successfully' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+    await sendEmail({
+      to: req.user.email,
+      subject: 'Loan Application Received',
+      text: `Your loan application for ${loanType} has been received. Our agent will contact you soon.`,
+    });
+
+    res.status(201).json({ message: 'Loan application submitted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get user loans
+exports.getUserLoans = async (req, res) => {
+  try {
+    const loans = await Loan.find({ user: req.user.id });
+
+    res.status(200).json(loans);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

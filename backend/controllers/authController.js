@@ -1,63 +1,105 @@
 const User = require('../models/User');
-const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/sendEmail');
-const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
-exports.signup = async (req, res) => {
-    const { name, email, password } = req.body;
-    try {
-        let user = await User.findOne({ email });
-        if (user) {
-            return res.status(400).json({ message: 'User already exists' });
-        }
-
-        user = new User({ name, email, password });
-
-        // Generate verification code
-        user.verificationCode = crypto.randomBytes(3).toString('hex');
-        await user.save();
-
-        // Send verification email
-        await sendEmail(user.email, 'Verify your email', `Your verification code is ${user.verificationCode}`);
-
-        res.status(201).json({ message: 'User registered. Please verify your email' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-exports.verifyEmail = async (req, res) => {
-    const { email, verificationCode } = req.body;
-    try {
-        const user = await User.findOne({ email });
-        if (!user || user.verificationCode !== verificationCode) {
-            return res.status(400).json({ message: 'Invalid verification code' });
-        }
-        user.isVerified = true;
-        user.verificationCode = undefined;
-        await user.save();
-        res.status(200).json({ message: 'Email verified successfully' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-exports.signin = async (req, res) => {
+// Register a new user
+exports.register = async (req, res) => {
+  try {
     const { email, password } = req.body;
-    try {
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid credentials' });
-        }
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials' });
-        }
-
-        const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
-        res.status(200).json({ token, userId: user._id });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: 'User already exists' });
     }
+
+    user = new User({
+      email,
+      password: await bcrypt.hash(password, 10),
+    });
+
+    await user.save();
+
+    // Generate a token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+
+    res.status(201).json({ token });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
+
+// Login a user
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Generate a token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Verify email
+exports.verifyEmail = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user || user.verificationCode !== code) {
+      return res.status(400).json({ message: 'Invalid code' });
+    }
+
+    user.isVerified = true;
+    user.verificationCode = undefined;
+    await user.save();
+
+    res.status(200).json({ message: 'Email verified' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Send verification code
+exports.sendVerificationCode = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'User not found' });
+    }
+
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    user.verificationCode = code;
+    await user.save();
+
+    await sendEmail({
+      to: email,
+      subject: 'Email Verification',
+      text: `Your verification code is ${code}`,
+    });
+
+    res.status(200).json({ message: 'Verification code sent' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+

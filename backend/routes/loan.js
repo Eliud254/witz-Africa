@@ -1,7 +1,13 @@
 const express = require('express');
-const { applyLoan } = require('../controllers/loanController');
+const { applyLoan, getLoanStatus } = require('../controllers/loanController');
+const { isAuthenticated } = require('../middleware/auth');
+
 const router = express.Router();
 
-router.post('/apply', applyLoan);
+// Apply for a loan
+router.post('/apply', isAuthenticated, applyLoan);
+
+// Get loan status
+router.get('/status', isAuthenticated, getLoanStatus);
 
 module.exports = router;
