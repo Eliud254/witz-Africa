@@ -35,3 +35,67 @@ function calculateLoan() {
 
 updateItemValue();
 updateLoanTerm();
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const applyLoanBtn = document.getElementById('apply-loan-btn');
+  const authModal = document.getElementById('auth-modal');
+  const loanFormModal = document.getElementById('loan-form-modal');
+  const authForm = document.getElementById('auth-form');
+  const loanApplicationForm = document.getElementById('loan-application-form');
+  const authCloseBtn = authModal.querySelector('.close');
+  const loanFormCloseBtn = loanFormModal.querySelector('.close');
+
+  applyLoanBtn.addEventListener('click', () => {
+    authModal.style.display = 'block';
+  });
+
+  authCloseBtn.addEventListener('click', () => {
+    authModal.style.display = 'none';
+  });
+
+  loanFormCloseBtn.addEventListener('click', () => {
+    loanFormModal.style.display = 'none';
+  });
+
+  authForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // Simulate successful sign-in/sign-up
+    authModal.style.display = 'none';
+    loanFormModal.style.display = 'block';
+  });
+
+  loanApplicationForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(loanApplicationForm);
+    const email = document.getElementById('email').value;
+    const loanType = formData.get('loan-type');
+    const itemValue = formData.get('item-value');
+    const downpayment = formData.get('downpayment');
+    const loanTerm = formData.get('loan-term');
+    
+    // Simulate form submission and email notification
+    sendEmailNotification(email, loanType, itemValue, downpayment, loanTerm);
+    loanFormModal.style.display = 'none';
+    alert('Loan application submitted successfully. You will receive a confirmation email shortly.');
+  });
+
+  function sendEmailNotification(email, loanType, itemValue, downpayment, loanTerm) {
+    // Simulate email sending (implement actual email sending logic here)
+    console.log(`Sending email to ${email}:
+      Loan Type: ${loanType}
+      Item Value: ${itemValue}
+      Downpayment: ${downpayment}
+      Loan Term: ${loanTerm}`);
+  }
+
+  window.onclick = (event) => {
+    if (event.target === authModal) {
+      authModal.style.display = 'none';
+    }
+    if (event.target === loanFormModal) {
+      loanFormModal.style.display = 'none';
+    }
+  };
+});
+
