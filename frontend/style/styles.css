@@ -447,3 +447,54 @@ button:hover {
 #loan-application-form button:hover {
   background-color: white;
 }
+
+
+/* Media Queries for Mobile View */
+@media (max-width: 768px) {
+  .navbar ul {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar ul li {
+    padding: 10px 20px;
+  }
+
+  .hero-slide h1 {
+    font-size: 36px;
+  }
+
+  .hero-slide p {
+    font-size: 16px;
+  }
+
+  .hero-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+  }
+
+  .points {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .point {
+    max-width: 100%;
+  }
+
+  .loan-calculator {
+    flex-direction: column;
+  }
+
+  .results-container {
+    margin-top: 20px;
+  }
+
+  .reviews-container {
+    flex-direction: column;
+  }
+
+  .footer-content {
+    flex-direction: column;
+  }
+}
