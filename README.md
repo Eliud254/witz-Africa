@@ -1,5 +1,7 @@
 ## Witz
 
+![Witz Africa Banner](./frontend/images/landingPage.jpg)
+
 **Witz** is an innovative startup aimed at providing accessible and affordable financial services across Africa. Our mission is to empower individuals and businesses to achieve their financial goals through a seamless and secure online platform.
 
 ## Table of Contents
