@@ -1,40 +1,15 @@
 const Loan = require('../models/Loan');
 const sendEmail = require('../utils/sendEmail');
 
-// Apply for a loan
-exports.applyLoan = async (req, res) => {
+exports.applyForLoan = async (req, res) => {
+  const { user, loanType, itemValue, downpayment, loanTerm, email } = req.body;
   try {
-    const { userId, loanType, amount, term, mpesaStatement } = req.body;
-
-    const loan = new Loan({
-      user: userId,
-      loanType,
-      amount,
-      term,
-      mpesaStatement,
-    });
-
+    const loan = new Loan({ user, loanType, itemValue, downpayment, loanTerm });
     await loan.save();
-
-    await sendEmail({
-      to: req.user.email,
-      subject: 'Loan Application Received',
-      text: `Your loan application for ${loanType} has been received. Our agent will contact you soon.`,
-    });
-
-    res.status(201).json({ message: 'Loan application submitted successfully' });
+    await sendEmail(email, 'Loan Application Received', `Your loan application for ${loanType} has been received.`);
+    res.status(201).send({ message: 'Loan application submitted successfully' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).send({ error: 'Error submitting loan application' });
   }
 };
 
-// Get user loans
-exports.getUserLoans = async (req, res) => {
-  try {
-    const loans = await Loan.find({ user: req.user.id });
-
-    res.status(200).json(loans);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};

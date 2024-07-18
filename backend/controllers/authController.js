@@ -1,105 +1,27 @@
 const User = require('../models/User');
-const sendEmail = require('../utils/sendEmail');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 
-// Register a new user
-exports.register = async (req, res) => {
+exports.signUp = async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.body;
-
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ message: 'User already exists' });
-    }
-
-    user = new User({
-      email,
-      password: await bcrypt.hash(password, 10),
-    });
-
+    const user = new User({ email, password });
     await user.save();
-
-    // Generate a token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
-    });
-
-    res.status(201).json({ token });
+    res.status(201).send({ message: 'User registered successfully' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).send({ error: 'Error registering user' });
   }
 };
 
-// Login a user
-exports.login = async (req, res) => {
+exports.signIn = async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.body;
-
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+    if (!user || !(await user.comparePassword(password))) {
+      return res.status(400).send({ error: 'Invalid email or password' });
     }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    // Generate a token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
-    });
-
-    res.status(200).json({ token });
+    const token = jwt.sign({ userId: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
+    res.send({ token });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).send({ error: 'Error signing in' });
   }
 };
-
-// Verify email
-exports.verifyEmail = async (req, res) => {
-  try {
-    const { email, code } = req.body;
-
-    const user = await User.findOne({ email });
-    if (!user || user.verificationCode !== code) {
-      return res.status(400).json({ message: 'Invalid code' });
-    }
-
-    user.isVerified = true;
-    user.verificationCode = undefined;
-    await user.save();
-
-    res.status(200).json({ message: 'Email verified' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Send verification code
-exports.sendVerificationCode = async (req, res) => {
-  try {
-    const { email } = req.body;
-
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'User not found' });
-    }
-
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    user.verificationCode = code;
-    await user.save();
-
-    await sendEmail({
-      to: email,
-      subject: 'Email Verification',
-      text: `Your verification code is ${code}`,
-    });
-
-    res.status(200).json({ message: 'Verification code sent' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
