@@ -21,7 +21,7 @@ function calculateLoan() {
   const itemValue = parseFloat(document.getElementById('item-value').value);
   const downpaymentPercent = parseFloat(document.getElementById('downpayment').value);
   const loanTerm = parseInt(document.getElementById('loan-term').value);
-  
+
   const downpayment = (itemValue * downpaymentPercent) / 100;
   const loanAmount = itemValue - downpayment;
   const interestRate = 0.1;
@@ -29,13 +29,12 @@ function calculateLoan() {
   const numberOfPayments = loanTerm;
 
   const monthlyRepayment = loanAmount * monthlyInterestRate / (1 - (Math.pow(1/(1 + monthlyInterestRate), numberOfPayments)));
-  
+
   document.getElementById('monthly-repayment').textContent = monthlyRepayment.toFixed(2);
 }
 
 updateItemValue();
 updateLoanTerm();
-
 
 document.addEventListener('DOMContentLoaded', () => {
   const applyLoanBtn = document.getElementById('apply-loan-btn');
@@ -73,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const itemValue = formData.get('item-value');
     const downpayment = formData.get('downpayment');
     const loanTerm = formData.get('loan-term');
-    
+
     // Simulate form submission and email notification
     sendEmailNotification(email, loanType, itemValue, downpayment, loanTerm);
     loanFormModal.style.display = 'none';
@@ -98,4 +97,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 });
-

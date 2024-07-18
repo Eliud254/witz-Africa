@@ -1,6 +1,6 @@
-# Witz
+## Witz
 
-Witz is a startup project designed to offer financial services similar to Aspira Kenya. Our mission is to provide accessible and affordable financial solutions to individuals and businesses, empowering them to achieve their financial goals.
+**Witz** is an innovative startup aimed at providing accessible and affordable financial services across Africa. Our mission is to empower individuals and businesses to achieve their financial goals through a seamless and secure online platform.
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -14,16 +14,16 @@ Witz is a startup project designed to offer financial services similar to Aspira
 
 ## Introduction
 
-Witz aims to revolutionize the financial services industry by offering innovative and user-friendly solutions. Our platform allows users to access a range of financial products, including loans, savings plans, and investment opportunities, all through a seamless and secure online experience.
+Witz is revolutionizing the financial services industry by offering user-friendly and innovative financial solutions. Our platform enables users to access a wide range of financial products, including loans, savings plans, and investment opportunities, all through a seamless and secure online experience.
 
 ## Features
 
-- **User Registration and Authentication**: Secure user sign-up and login using JWT.
-- **Loan Application**: Easy and quick loan application process with instant feedback.
-- **Savings Plans**: Flexible savings plans tailored to user needs.
+- **User Registration and Authentication**: Secure user sign-up and login utilizing JWT.
+- **Loan Application**: Quick and easy loan application process with instant feedback.
+- **Savings Plans**: Flexible savings plans tailored to individual needs.
 - **Investment Opportunities**: Access to various investment products with detailed insights.
 - **User Dashboard**: Personalized dashboard with financial summaries and recommendations.
-- **Responsive Design**: Fully responsive design ensuring a seamless experience on all devices.
+- **Responsive Design**: Fully responsive design ensuring a seamless experience across all devices.
 - **Secure Transactions**: End-to-end encryption ensuring the highest level of security for user transactions.
 
 ## Tech Stack
@@ -32,7 +32,6 @@ Witz aims to revolutionize the financial services industry by offering innovativ
 - **HTML**
 - **CSS**
 - **JavaScript**
-- **React.js** (or another chosen framework)
 
 ### Backend
 - **Node.js**
@@ -52,6 +51,7 @@ Witz aims to revolutionize the financial services industry by offering innovativ
 - MongoDB installed and running
 
 ### Steps
+
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/yourusername/witz.git
@@ -71,11 +71,13 @@ Witz aims to revolutionize the financial services industry by offering innovativ
    ```
 
 4. **Set Up Environment Variables**
-   Create a `.env` file in the `backend` directory and add the following:
-   ```
+   Create a `.env` file in the `backend` directory with the following content:
+   ```plaintext
    PORT=5000
    MONGO_URI=your_mongodb_connection_string
    JWT_SECRET=your_jwt_secret
+   EMAIL_USER=your_email@example.com
+   EMAIL_PASS=your_email_password
    ```
 
 5. **Run the Application**
@@ -90,7 +92,7 @@ Witz aims to revolutionize the financial services industry by offering innovativ
    ```
 
 6. **Access the Application**
-   Open your browser and go to `http://localhost:3000`
+   Open your browser and navigate to `http://localhost:3000`.
 
 ## Usage
 
@@ -98,11 +100,11 @@ Witz aims to revolutionize the financial services industry by offering innovativ
 2. **Login**: Access your account using your credentials.
 3. **Explore Services**: Navigate through the available financial services.
 4. **Apply for Loans**: Submit a loan application and receive instant feedback.
-5. **Manage Finances**: Use the dashboard to manage your savings, investments, and more.
+5. **Manage Finances**: Utilize the dashboard to manage your savings, investments, and more.
 
 ## Contributing
 
-We welcome contributions to Witz! Please follow these steps to contribute:
+We welcome and appreciate contributions to Witz! To contribute, please follow these steps:
 
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature/YourFeature`).
@@ -116,7 +118,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For any inquiries or support, please contact us at:
+For inquiries or support, please reach out to us at:
 - **Email**: support@witz.com
 - **Twitter**: [@witz_finance](https://twitter.com/witz_Africa)
 - **LinkedIn**: [Witz](https://www.linkedin.com/company/witz-Africa)
