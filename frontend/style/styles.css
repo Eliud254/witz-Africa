@@ -16,6 +16,7 @@ body {
   justify-content: space-between;
   padding: 0 2%;
   background: #222831;
+  position: fixed;
 }
 
 .logo a {
@@ -71,7 +72,7 @@ body {
   justify-content: center;
   align-items: center;
   height: calc(100vh - 100px);
-  background-color: #222831; /* Assuming background should match the rest */
+  background-color: #222831;
   text-align: center;
   padding: 0 20px;
 }
@@ -82,7 +83,7 @@ body {
 
 .hero-slide h1 {
   color: #f96d00;
-  font-size: 48px; /* Adjusted for better responsiveness */
+  font-size: 48px;
   margin-bottom: 20px;
 }
 
@@ -383,7 +384,6 @@ button:hover {
 }
 
 
-/* Modal styling */
 .modal {
   display: none; 
   position: fixed; 
@@ -394,16 +394,14 @@ button:hover {
   height: 100%; 
   overflow: auto; 
   background-color: rgba(0,0,0,0.4); 
-  padding-top: 60px; 
+  padding-top: 70px; 
 }
 
 .modal-content {
-  background-color: #fefefe;
   margin: 5% auto; 
   padding: 20px;
-  border: 1px solid #888;
   width: 80%; 
-  max-width: 500px;
+  max-width: 600px;
   border-radius: 10px;
 }
 
@@ -416,7 +414,7 @@ button:hover {
 
 .close:hover,
 .close:focus {
-  color: black;
+  color:#f96d00;
   text-decoration: none;
   cursor: pointer;
 }
@@ -425,8 +423,8 @@ button:hover {
 #loan-application-form input,
 #loan-application-form select {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+  padding: 15px;
+  margin: 15px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
@@ -435,17 +433,25 @@ button:hover {
 #auth-form button,
 #loan-application-form button {
   background-color: #f96d00;
-  color: black;
-  padding: 10px 20px;
+  color:black;
+  padding: 15px 30px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 18px;
 }
 
 #auth-form button:hover,
 #loan-application-form button:hover {
   background-color: white;
+}
+
+#toggle-auth {
+  cursor: pointer;
+  color: #f96d00;
+  text-align: center;
+  margin-top: 10px;
 }
 
 

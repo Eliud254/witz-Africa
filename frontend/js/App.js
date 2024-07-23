@@ -28,7 +28,7 @@ function calculateLoan() {
   const monthlyInterestRate = interestRate / 12;
   const numberOfPayments = loanTerm;
 
-  const monthlyRepayment = loanAmount * monthlyInterestRate / (1 - (Math.pow(1/(1 + monthlyInterestRate), numberOfPayments)));
+  const monthlyRepayment = loanAmount * monthlyInterestRate / (1 - (Math.pow(1 / (1 + monthlyInterestRate), numberOfPayments)));
 
   document.getElementById('monthly-repayment').textContent = monthlyRepayment.toFixed(2);
 }
@@ -44,9 +44,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const loanApplicationForm = document.getElementById('loan-application-form');
   const authCloseBtn = authModal.querySelector('.close');
   const loanFormCloseBtn = loanFormModal.querySelector('.close');
+  const toggleAuth = document.getElementById('toggle-auth');
+
+  let userIsSignedIn = false; // Placeholder for user authentication status
 
   applyLoanBtn.addEventListener('click', () => {
-    authModal.style.display = 'block';
+    if (userIsSignedIn) {
+      loanFormModal.style.display = 'block';
+    } else {
+      authModal.style.display = 'block';
+    }
   });
 
   authCloseBtn.addEventListener('click', () => {
@@ -60,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   authForm.addEventListener('submit', (e) => {
     e.preventDefault();
     // Simulate successful sign-in/sign-up
+    userIsSignedIn = true; // Set user as signed in
     authModal.style.display = 'none';
     loanFormModal.style.display = 'block';
   });
@@ -77,6 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
     sendEmailNotification(email, loanType, itemValue, downpayment, loanTerm);
     loanFormModal.style.display = 'none';
     alert('Loan application submitted successfully. You will receive a confirmation email shortly.');
+  });
+
+  toggleAuth.addEventListener('click', () => {
+    const isSignUp = toggleAuth.innerText.includes('Sign up');
+    toggleAuth.innerText = isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up";
   });
 
   function sendEmailNotification(email, loanType, itemValue, downpayment, loanTerm) {
